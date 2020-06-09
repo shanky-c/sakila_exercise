@@ -1,0 +1,87 @@
+1. Write a query to find the full name of the actor who has acted in the maximum number of movies.
+
+SELECT CONCAT(A.FIRST_NAME,' ', A.LAST_NAME) AS Full_name
+FROM ACTOR A INNER JOIN FILM_ACTOR F ON A. ACTOR_ID = F.ACTOR_ID
+GROUP BY Full_name
+ORDER BY COUNT(FILM_ID) desc
+limit 1;
+
+
+2. Write a query to find the full name of the actor who has acted in the third most number of movies.
+
+SELECT CONCAT(A.FIRST_NAME,' ', A.LAST_NAME) AS Full_name
+FROM ACTOR A INNER JOIN FILM_ACTOR F ON A. ACTOR_ID = F.ACTOR_ID
+GROUP BY Full_name
+ORDER BY COUNT(FILM_ID) desc
+limit 2,1;
+
+3. Write a query to find the film which grossed the highest revenue for the video renting organisation.
+
+select F.TITLE as title FROM FILM F INNER JOIN INVENTORY I ON F.FILM_ID = I.FILM_ID
+INNER JOIN RENTAL R ON I.INVENTORY_ID = R.INVENTORY_ID 
+INNER JOIN PAYMENT P ON R.RENTAL_ID = P.RENTAL_ID
+GROUP BY title
+ORDER BY SUM(AMOUNT) desc
+limit 1;
+
+
+4. Write a query to find the city which generated the maximum revenue for the organisation.
+
+select C.CITY as city FROM CITY C INNER JOIN ADDRESS A ON C.CITY_ID = A.CITY_ID
+INNER JOIN CUSTOMER CU ON A.ADDRESS_ID = CU.ADDRESS_ID 
+INNER JOIN PAYMENT P ON CU.CUSTOMER_ID = P.CUSTOMER_ID
+GROUP BY city
+ORDER BY SUM(AMOUNT) desc
+limit 1;
+
+5.Write a query to find the full names of customers who have rented sci-fi movies more than 5 times. Arrange these names in the alphabetical order.
+
+select concat(first_name, ' ', last_name) as Customer_name
+from category
+inner join film_category
+using (category_id)
+inner join film
+using (film_id)
+inner join inventory
+using (film_id)
+inner join rental
+using (inventory_id)
+inner join customer
+using (customer_id)
+where name = 'Sci-Fi'
+group by Customer_name
+having count(rental_id) > 5
+order by Customer_name;
+
+
+6. Write a query to find the full names of those customers who have rented at least one movie and belong to the city Arlington.
+
+SELECT CONCAT(FIRST_NAME , ' ', LAST_NAME) AS Customer_name 
+FROM Customer c 
+inner join rental r on r.customer_id = c.customer_id
+inner join address a on a.address_id = c.address_id
+inner join city ci on ci.city_id = a.city_id
+where city = 'Arlington'
+GROUP BY Customer_name
+HAVING COUNT(rental_id) > 0  
+ORDER BY Customer_name ASC;
+
+7. Write a query to find the number of movies rented across each country. Display only those countries where at least one movie was rented. Arrange these countries in the alphabetical order.
+
+SELECT co.country, COUNT(rental_id) as Rental_count
+FROM Customer c 
+inner join rental r on r.customer_id = c.customer_id
+inner join address a on a.address_id = c.address_id
+inner join city ci on ci.city_id = a.city_id
+inner join country co on co.country_id = ci.country_id
+GROUP BY country
+HAVING  Rental_count > 0
+Order by country;
+
+
+
+
+
+
+
+
