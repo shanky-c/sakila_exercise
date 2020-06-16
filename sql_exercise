@@ -78,6 +78,45 @@ GROUP BY country
 HAVING  Rental_count > 0
 Order by country;
 
+8. Write a query to find the month number (Eg: 4 corresponds to April) in which the most number of payments were made.
+
+select month(PAYMENT_DATE) as Payment_month, count(PAYMENT_DATE) as No_of_payments from PAYMENT group by Payment_month order by No_of_payments desc limit 1;
+
+9. List the rounded average film lengths for each film category. Arrange the values in the decreasing order of the average film lengths.
+
+select CEILING(avg(LENGTH)) as avg_Length, NAME as name from FILM inner join FILM_CATEGORY using (FILM_ID) inner join CATEGORY using (CATEGORY_ID) group by name order by avg_Length desc; 
+
+10. Write a query to find the number of occurrences of each film_category in each city. Arrange them in the decreasing order of their category count.
+
+select name,city,count(*) as category_count
+from CATEGORY c INNER JOIN FILM_CATEGORY fc on c.CATEGORY_ID = fc.CATEGORY_ID
+INNER JOIN FILM f on f.FILM_ID = fc.FILM_ID INNER JOIN INVENTORY i on f.FILM_ID = i.FILM_ID
+INNER JOIN STORE s on s.STORE_ID = i.STORE_ID INNER JOIN ADDRESS a on s.ADDRESS_ID = a.ADDRESS_ID
+INNER JOIN CITY cy on cy.CITY_ID = a.CITY_ID
+group by city,name
+order by category_count desc;
+
+11. Suppose you are running an advertising campaign in Canada for which you need the film_ids and titles of all the films released in Canada. List the films in the alphabetical order of their titles.
+
+SELECT DISTINCT film_id, title
+from film
+inner join inventory using (film_id)
+inner join store using (store_id)
+inner join address using (address_id)
+inner join city using (city_id)
+inner join country using (country_id)
+where country = 'Canada'
+
+12. Write a query to list all the films existing in the 'Comedy' category and arrange them in the alphabetical order.
+
+select TITLE from FILM inner join FILM_CATEGORY using (FILM_ID) inner join CATEGORY using (CATEGORY_ID) where name='Comedy' order by TITLE asc;
+
+13. List the first and last names of all customers whose first names start with the letters 'A', 'J' or 'T' or last names end with the substring 'on'. Arrange them alphabetically in the order of their first names.
+
+select FIRST_NAME, LAST_NAME from CUSTOMER where FIRST_NAME REGEXP '^[AJT].*' or LAST_NAME like '%on' order by FIRST_NAME asc;
+
+
+
 
 
 
